@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>挪个车 - 请及时联系我</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            background: linear-gradient(135deg, #e8f0ec 0%, #d4e2da 100%);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", Roboto, "Helvetica Neue", sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .card {
+            max-width: 500px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 48px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #1e6f3f, #0f5430);
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+        }
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .plate-area {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .plate-label {
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 8px;
+        }
+        .plate-number {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: #1e6f3f;
+            background: white;
+            display: inline-block;
+            padding: 8px 24px;
+            border-radius: 40px;
+            font-family: monospace;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .content {
+            padding: 30px 24px;
+        }
+        .step {
+            margin-bottom: 24px;
+        }
+        .step-title {
+            font-weight: 600;
+            color: #1e6f3f;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        .step-desc {
+            color: #6c757d;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .btn {
+            flex: 1;
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            padding: 14px 20px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            min-width: 140px;
+        }
+        .btn-call {
+            background: #1e6f3f;
+            color: white;
+            border: none;
+            box-shadow: 0 4px 12px rgba(30,111,63,0.3);
+        }
+        .btn-call:active {
+            transform: scale(0.96);
+            background: #0f5430;
+        }
+        .btn-sms {
+            background: #f0f7f3;
+            color: #1e6f3f;
+            border: 1px solid #cde0d7;
+        }
+        .btn-sms:active {
+            transform: scale(0.96);
+            background: #e2f4ed;
+        }
+        .notice {
+            background: #e8f5e9;
+            border-radius: 20px;
+            padding: 12px 16px;
+            font-size: 13px;
+            color: #2e7d32;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 16px;
+            text-align: center;
+            font-size: 12px;
+            color: #adb5bd;
+            border-top: 1px solid #e9ecef;
+        }
+        .hidden { display: none; }
+        .retry-btn {
+            background: #e9ecef;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 12px;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+        @media (max-width: 480px) {
+            .plate-number { font-size: 24px; letter-spacing: 2px; }
+            .btn { padding: 12px 16px; font-size: 14px; }
+            .content { padding: 24px 20px; }
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <div class="header">
+        <h1>📞 挪个车 · 请多关照</h1>
+        <p>临时停靠，若阻碍通行请及时联系</p>
+    </div>
+    <div class="plate-area">
+        <div class="plate-label">车牌号码</div>
+        <div class="plate-number" id="plateNumber">苏U·1U16</div>
+    </div>
+    <div class="content">
+        <div class="step">
+            <div class="step-title">✅ 第一步：扫描二维码（已完成）</div>
+            <div class="step-desc">感谢您扫码联系，请选择联系方式：</div>
+        </div>
+
+        <div class="btn-group">
+            <a href="#" id="callBtn" class="btn btn-call">📞 立即拨打电话</a>
+            <a href="#" id="smsBtn" class="btn btn-sms">✉️ 发送短信提醒</a>
+        </div>
+
+        <div class="btn-group hidden" id="retryGroup">
+            <button id="retryCallBtn" class="retry-btn">📞 电话重试</button>
+            <button id="retrySmsBtn" class="retry-btn">✉️ 短信重试</button>
+        </div>
+
+        <div class="step">
+            <div class="step-title">📞 第三步：联络成功</div>
+            <div class="step-desc">非常抱歉，请耐心等待，车主正在速速赶往。</div>
+        </div>
+
+        <div class="notice" id="tipsMsg">
+            💡 点击上方按钮即可联系车主 | 通话费用由您的运营商收取
+        </div>
+    </div>
+    <div class="footer">
+        温馨提醒 | 挪车请多包涵 🙏
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ========== 配置信息 ==========
+        const PHONE = "17717375052";
+        const PLATE = "苏U·1U16";
+        const SMS_BODY = "您好，您的车可能需要挪一下，麻烦尽快处理，谢谢！";
+        
+        // ========== DOM 元素 ==========
+        document.getElementById('plateNumber').innerText = PLATE;
+        
+        const callBtn = document.getElementById('callBtn');
+        const smsBtn = document.getElementById('smsBtn');
+        const retryGroup = document.getElementById('retryGroup');
+        const retryCallBtn = document.getElementById('retryCallBtn');
+        const retrySmsBtn = document.getElementById('retrySmsBtn');
+        const tipsMsg = document.getElementById('tipsMsg');
+        
+        // 检测环境
+        const ua = navigator.userAgent || '';
+        const isWeChat = /MicroMessenger/i.test(ua);
+        const isIOS = /\(i[^;]+;( U;)? CPU.+Mac OS X/.test(ua);
+        
+        // 构造链接
+        const telLink = `tel:${PHONE}`;
+        const smsLink = `sms:${PHONE}${isIOS ? '&' : '?'}body=${encodeURIComponent(SMS_BODY)}`;
+        
+        // 设置按钮链接
+        callBtn.href = telLink;
+        smsBtn.href = smsLink;
+        
+        // 显示重试按钮的函数
+        function showRetryButtons() {
+            retryGroup.classList.remove('hidden');
+        }
+        
+        // 提示函数
+        function setTip(msg, isError = false) {
+            tipsMsg.innerHTML = msg;
+            if (isError) {
+                tipsMsg.style.background = '#ffe0d9';
+                tipsMsg.style.color = '#bc4e3a';
+            } else {
+                tipsMsg.style.background = '#e8f5e9';
+                tipsMsg.style.color = '#2e7d32';
+            }
+        }
+        
+        // 微信环境提示
+        if (isWeChat) {
+            setTip('⚠️ 微信内可能无法自动跳转，请直接点击上方按钮选择联系方式');
+        }
+        
+        // 检查 URL 参数自动执行
+        const urlParams = new URLSearchParams(window.location.search);
+        const autoAction = urlParams.get('auto');
+        
+        if (autoAction === 'call') {
+            setTimeout(() => {
+                window.location.href = telLink;
+                showRetryButtons();
+                setTip('正在尝试拨打电话... 如未响应请点击重试按钮');
+            }, 300);
+        } else if (autoAction === 'sms') {
+            setTimeout(() => {
+                window.location.href = smsLink;
+                showRetryButtons();
+                setTip('正在尝试发送短信... 如未响应请点击重试按钮');
+            }, 300);
+        }
+        
+        // 按钮点击事件
+        callBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = telLink;
+            showRetryButtons();
+            setTip('已尝试拨打电话，请查看手机拨号界面');
+        });
+        
+        smsBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = smsLink;
+            showRetryButtons();
+            setTip('已尝试发送短信，请查看手机短信界面');
+        });
+        
+        // 重试按钮
+        retryCallBtn.addEventListener('click', function() {
+            window.location.href = telLink;
+            setTip('正在重试拨打电话...');
+        });
+        
+        retrySmsBtn.addEventListener('click', function() {
+            window.location.href = smsLink;
+            setTip('正在重试发送短信...');
+        });
+        
+        console.log("挪车页面已加载，手机号:", PHONE, "车牌:", PLATE);
+    })();
+</script>
+</body>
+</html>
